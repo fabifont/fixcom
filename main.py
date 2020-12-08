@@ -3,6 +3,23 @@ import getopt
 import sys
 import re
 
+def get_word(start, char_list):
+  """get_word(start, char_list) -> word
+
+  Creates a word by adding characters until ' ', '\\n' is found or start < len(char_list)
+  then returns it.
+
+  """
+
+  size = len(char_list)
+  word = ""
+
+  while(start < size and char_list[start] != ' ' and char_list[start] != '\n'):
+    word += char_list[start]
+    start += 1
+
+  return word
+
 # options
 OPTIONS = 'hnt:c:e:'
 LONG_OPTIONS = ['help', 'no-space', 'type=', 'case=', 'exclude=']
@@ -119,12 +136,14 @@ for match in matches:
       # there were a space, indexes are the same but we need to edit the next char
       move = 1
 
-  # case: uppercase
-  if upper:
-    text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
-  # case: lowercase
-  else:
-    text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
+  # if the word that will be formatted is not excluded
+  if(get_word(match + comment_type_size + counter + move, text_list) not in excluded_list):
+    # case: uppercase
+    if upper:
+      text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
+    # case: lowercase
+    else:
+      text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
 
 # join list into text
 file_text = ''.join(text_list)
@@ -133,3 +152,4 @@ file_text = ''.join(text_list)
 new_file = open('new_' + filename, 'w')
 new_file.write(file_text)
 new_file.close()
+
