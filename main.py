@@ -37,6 +37,7 @@ except getopt.error as err:
   print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
   sys.exit(2)
 
+comment_type = '#'
 comment_type_size = len(comment_type)
 file_stringname = str(values[0])
 
@@ -44,26 +45,30 @@ file = open(file_stringname, "r")
 file_text = file.read()
 file.close()
 
-matches = [m.start() for m in re.finditer(str(comment_type), file_text)]
+matches = [m.start() for m in re.finditer(comment_type, file_text)]
 
 text_list = list(file_text)
 
 counter = 0
 
 for match in matches:
-
-  if(no_space and text_list[match + comment_type_size + counter] == ' '):
-    # print("\nno_space: " + str(no_space) + " index: " + text_list[match], "char: " + text_list[match + comment_type_size])
-    text_list.remove(match + comment_type_size + counter)
-    counter -= 1
-  elif((not no_space) and text_list[match + comment_type_size + counter] != ' '):
-    text_list.insert(match + comment_type_size + counter, ' ')
-    counter += 1
+  if(no_space):
+    if(text_list[match + comment_type_size + counter] == ' '):
+      del text_list[match + comment_type_size + counter]
+      counter -= 1
+      move = 1
+    else: move = 0
+  elif(not no_space): 
+    if(text_list[match + comment_type_size + counter] != ' '):
+      text_list.insert(match + comment_type_size + counter, ' ')
+      counter += 1
+      move = 0
+    else: move = 1
 
   if upper:
-    text_list[match + comment_type_size + no_space + counter] = text_list[match + comment_type_size + no_space + counter].upper()
+    text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
   else:
-    text_list[match + comment_type_size + (not no_space) + counter] = text_list[match + comment_type_size + (not no_space) + counter].lower()
+    text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
 
 file_text = ''.join(text_list)
 
