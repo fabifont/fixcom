@@ -1,2 +1,5 @@
 # fixcom
-Fix your comments
+Command line tool to fix comments into a file.
+
+## Usage
+`fixcom` has two 
