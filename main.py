@@ -126,7 +126,7 @@ for match in matches:
   else:
     text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
 
-# join list intto text
+# join list into text
 file_text = ''.join(text_list)
 
 # write the result into a new file
