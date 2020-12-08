@@ -78,7 +78,7 @@ except getopt.error as err:
 if comment_type == None:
   print('\nMissing mandatory comment_type')
   print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
-  exit(2)
+  sys.exit(2)
 
 comment_type_size = len(comment_type)
 filename = str(values[0])
