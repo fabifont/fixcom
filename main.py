@@ -124,9 +124,12 @@ file.close()
 if fix_spaces:
   lines = file_text.splitlines()
   for index in range(len(lines)):
+    # if the line contains a comment and it is not escaped
     if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
       splitted_line = lines[index].split(comment_type)
+      # remove extra spaces only after the command symbol
       splitted_line[1] = ' '.join(splitted_line[1].split())
+      # update the line
       lines[index] = splitted_line[0] + comment_type + splitted_line[1]
 
   file_text = '\n'.join(lines)
