@@ -3,6 +3,9 @@ import getopt
 import sys
 import re
 
+#def remove_spaces(start, char_list):
+
+
 def get_word(start, char_list):
   """get_word(start, char_list) -> word
 
@@ -21,14 +24,17 @@ def get_word(start, char_list):
   return word
 
 # options
-OPTIONS = 'hnt:c:e:'
-LONG_OPTIONS = ['help', 'no-space', 'type=', 'case=', 'exclude=']
+OPTIONS = 'hnst:c:e:'
+LONG_OPTIONS = ['help', 'no-space', 'spaces', 'type=', 'case=', 'exclude=']
 
 # get argv
 argument_list = sys.argv[1:]
 
 # no space after comment_type
 no_space = False
+
+# fix extra spaces
+fix_spaces = False
 
 # comment type
 comment_type = None
@@ -70,6 +76,9 @@ try:
     # case: no-space
     elif current_argument in ('-n', '--no-space'):
       no_space = True
+    # case: fix extra spaces
+    elif current_argument in ('-s', '--spaces'):
+      fix_spaces = True
     # case: type
     elif current_argument in ('-t', '--type'):
       comment_type = str(current_value)
@@ -107,6 +116,12 @@ file.close()
 
 # find the comments that match
 matches = [m.start() for m in re.finditer(comment_type, file_text)]
+# find escaped comment_type matches
+fake_matches = [m.start() for m in re.finditer('\\\\' + comment_type, file_text)]
+
+# remove fake matches from matches
+for fake_match in fake_matches:
+  matches.remove(fake_match + 1)
 
 # convert read text into list to edit char by index
 text_list = list(file_text)
@@ -148,8 +163,16 @@ for match in matches:
 # join list into text
 file_text = ''.join(text_list)
 
+# remove extra spaces
+if fix_spaces:
+  lines = file_text.splitlines()
+  for index in range(len(lines)):
+    if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
+      lines[index] = ' '.join(lines[index].split())
+
+  file_text = '\n'.join(lines)
+
 # write the result into a new file
 new_file = open('new_' + filename, 'w')
 new_file.write(file_text)
 new_file.close()
-
