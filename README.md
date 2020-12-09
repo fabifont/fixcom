@@ -1,5 +1,5 @@
 # fixcom
-Command line tool to fix comments into a file.
+Script to fix comments into a file.
 
 ## Usage
 Just for the explanation:
