@@ -5,6 +5,7 @@ Command line tool to fix comments into a file.
 Just for the explanation:
 - optional arguments are inside `()`
 - the value of an argument is inside `<>`
+
 `python3 main.py (-h) (-n) (-s) (-a) (-c <format_case>) (-e <excluded_words>) -t <comment_symbol> filename`
 
 ## Arguments explanation
