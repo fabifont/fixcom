@@ -26,7 +26,7 @@ Without value:
   
 With value:
 - `-c`, `--case`: `u`, `upper` or `l`, `lower`. Formatting type. Default: `u`
-  - Example: `# this is a comment` becomes ` This is a comment` (without `--all`)
+  - Example: `# this is a comment` becomes `# This is a comment` (without `--all`)
 - `-e`, `--exclude`: string of words separated by `,` and surrounded by `'`
   - Example: `--exclude 'NULL,ERROR'`. `# VALUE is NULL` with `-c lower -all` becomes `# value is NULL`
   
