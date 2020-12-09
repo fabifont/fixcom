@@ -120,8 +120,22 @@ file = open(filename, 'r')
 file_text = file.read()
 file.close()
 
+# remove extra spaces if `--spaces` is specified
+if fix_spaces:
+  lines = file_text.splitlines()
+  for index in range(len(lines)):
+    # TODO: handle comments after a line of code (format only the comment).
+    # Example: print      "mum" # prints    "mum"
+    # Current result: print "mum" # prints "mum"
+    # Expected result: print      "mum" # prints "mum"
+    if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
+      lines[index] = ' '.join(lines[index].split())
+
+  file_text = '\n'.join(lines)
+
 # find the comments that match
 matches = [m.start() for m in re.finditer(comment_type, file_text)]
+
 # find escaped comment_type matches
 fake_matches = [m.start() for m in re.finditer('\\\\' + comment_type, file_text)]
 
@@ -176,7 +190,7 @@ for match in matches:
           # case: lowercase
           else:
             text_list[current + i] = text_list[current + i].lower()
-      # go to next word (or next space) # TODO: format spaces at the beginning if `--spaces is specified`
+      # current = index of first char after current word / space
       current += word_size + (word == '')
   # if only the first char of the first word must be formatted
   else:
@@ -191,19 +205,6 @@ for match in matches:
 
 # join list into text
 file_text = ''.join(text_list)
-
-# remove extra spaces
-if fix_spaces:
-  lines = file_text.splitlines()
-  for index in range(len(lines)):
-    # TODO: handle comments after a line of code (format only the comment).
-    # Example: print      "mum" # prints    "mum"
-    # Current result: print "mum" # prints "mum"
-    # Expected result: print      "mum" # prints "mum"
-    if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
-      lines[index] = ' '.join(lines[index].split())
-
-  file_text = '\n'.join(lines)
 
 # write the result into a new file
 new_file = open('new_' + filename, 'w')
