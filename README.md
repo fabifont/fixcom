@@ -20,7 +20,7 @@ Without value:
 - `-n`, `--no-space`: formats without space after the command symbol
   - Example: `# this is a comment` becomes `#this is a comment`
 - `-s`, `--spaces`: removes extra spaces after comment symbol
-  - Example: `#     this   is a  comment` becomes `# this is a comment`
+  - Example: <pre>`#     this   is a  comment`</pre> becomes `# this is a comment`
 - `-a`, `--all`: applies uppercase / lowercase to all words after comment symbol
   - Example: `# THis Is A COMMent` becomes `# this is a comment` or `THIS IS A COMMENT` respecting excluded words
   
