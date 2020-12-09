@@ -1,4 +1,5 @@
 *.py
+*.c
 *.txt
 !main.py
 .vscode
