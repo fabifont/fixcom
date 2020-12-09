@@ -22,7 +22,7 @@ Without value:
 - `-s`, `--spaces`: removes extra spaces after comment symbol
   - Example: <pre>`#     this   is a  comment`</pre> becomes `# this is a comment`
 - `-a`, `--all`: applies uppercase / lowercase to all words after comment symbol
-  - Example: `# THis Is A COMMent` becomes `# this is a comment` or `THIS IS A COMMENT` respecting excluded words
+  - Example: `# THis Is A COMMent` becomes `# this is a comment` or `# THIS IS A COMMENT` respecting excluded words
   
 With value:
 - `-c`, `--case`: `u`, `upper` or `l`, `lower`. Formatting type. Default: `u`
