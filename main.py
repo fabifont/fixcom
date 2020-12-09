@@ -83,7 +83,7 @@ try:
     elif current_argument in ('-s', '--spaces'):
       fix_spaces = True
     # case: format all words in comments
-    elif current_argument in ('-s', '--spaces'):
+    elif current_argument in ('-a', '--all'):
       format_all = True
     # case: type
     elif current_argument in ('-t', '--type'):
@@ -157,12 +157,18 @@ for match in matches:
       # there were a space, indexes are the same but we need to edit the next char
       move = 1
 
+  # current char index
+  current = match + comment_type_size + counter + move
+  # if `--all` is specified format all words into the comment
   if format_all:
-    current = match + comment_type_size + counter + move
+    # until it is not the end and the line is not over
     while(current < len(text_list) and text_list[current] != '\n'):
+      # get the word that will be formatted and its size
       word = get_word(current, text_list)
       word_size = len(word)
+      # if the word is not excluded
       if(word not in excluded_list):
+        # format every char
         for i in range(word_size):
           # case: uppercase
           if upper:
@@ -170,16 +176,18 @@ for match in matches:
           # case: lowercase
           else:
             text_list[current + i] = text_list[current + i].lower()
+      # go to next word (or next space) # TODO: format spaces at the beginning if `--spaces is specified`
       current += word_size + (word == '')
+  # if only the first char of the first word must be formatted
   else:
-    # if the word that will be formatted is not excluded
-    if(get_word(match + comment_type_size + counter + move, text_list) not in excluded_list):
+    # if the word is not excluded
+    if(get_word(current, text_list) not in excluded_list):
       # case: uppercase
       if upper:
-        text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
+        text_list[current] = text_list[current].upper()
       # case: lowercase
       else:
-        text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
+        text_list[current] = text_list[current].lower()
 
 # join list into text
 file_text = ''.join(text_list)
