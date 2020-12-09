@@ -3,9 +3,6 @@ import getopt
 import sys
 import re
 
-#def remove_spaces(start, char_list):
-
-
 def get_word(start, char_list):
   """get_word(start, char_list) -> word
 
@@ -122,6 +119,7 @@ file.close()
 
 # find the comments that match
 matches = [m.start() for m in re.finditer(comment_type, file_text)]
+
 # find escaped comment_type matches
 fake_matches = [m.start() for m in re.finditer('\\\\' + comment_type, file_text)]
 
