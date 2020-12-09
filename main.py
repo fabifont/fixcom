@@ -167,6 +167,10 @@ file_text = ''.join(text_list)
 if fix_spaces:
   lines = file_text.splitlines()
   for index in range(len(lines)):
+    # TODO: handle comments after a line of code (format only the comment).
+    # Example: print      "mum" # prints    "mum"
+    # Current result: print "mum" # prints "mum"
+    # Expected result: print      "mum" # prints "mum"
     if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
       lines[index] = ' '.join(lines[index].split())
 
