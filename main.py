@@ -21,14 +21,20 @@ def get_word(start, char_list):
   return word
 
 # options
-OPTIONS = 'hnt:c:e:'
-LONG_OPTIONS = ['help', 'no-space', 'type=', 'case=', 'exclude=']
+OPTIONS = 'hnsat:c:e:'
+LONG_OPTIONS = ['help', 'no-space', 'spaces', 'all', 'type=', 'case=', 'exclude=']
 
 # get argv
 argument_list = sys.argv[1:]
 
 # no space after comment_type
 no_space = False
+
+# fix extra spaces
+fix_spaces = False
+
+# format all words in comments
+format_all = False
 
 # comment type
 comment_type = None
@@ -70,6 +76,12 @@ try:
     # case: no-space
     elif current_argument in ('-n', '--no-space'):
       no_space = True
+    # case: fix extra spaces
+    elif current_argument in ('-s', '--spaces'):
+      fix_spaces = True
+    # case: format all words in comments
+    elif current_argument in ('-s', '--spaces'):
+      format_all = True
     # case: type
     elif current_argument in ('-t', '--type'):
       comment_type = str(current_value)
@@ -108,6 +120,13 @@ file.close()
 # find the comments that match
 matches = [m.start() for m in re.finditer(comment_type, file_text)]
 
+# find escaped comment_type matches
+fake_matches = [m.start() for m in re.finditer('\\\\' + comment_type, file_text)]
+
+# remove fake matches from matches
+for fake_match in fake_matches:
+  matches.remove(fake_match + 1)
+
 # convert read text into list to edit char by index
 text_list = list(file_text)
 
@@ -136,20 +155,47 @@ for match in matches:
       # there were a space, indexes are the same but we need to edit the next char
       move = 1
 
-  # if the word that will be formatted is not excluded
-  if(get_word(match + comment_type_size + counter + move, text_list) not in excluded_list):
-    # case: uppercase
-    if upper:
-      text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
-    # case: lowercase
-    else:
-      text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
+  if format_all:
+    current = match + comment_type_size + counter + move
+    while(current < len(text_list) and text_list[current] != '\n'):
+      word = get_word(current, text_list)
+      word_size = len(word)
+      if(word not in excluded_list):
+        for i in range(word_size):
+          # case: uppercase
+          if upper:
+            text_list[current + i] = text_list[current + i].upper()
+          # case: lowercase
+          else:
+            text_list[current + i] = text_list[current + i].lower()
+      current += word_size + (word == '')
+  else:
+    # if the word that will be formatted is not excluded
+    if(get_word(match + comment_type_size + counter + move, text_list) not in excluded_list):
+      # case: uppercase
+      if upper:
+        text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].upper()
+      # case: lowercase
+      else:
+        text_list[match + comment_type_size + counter + move] = text_list[match + comment_type_size + counter + move].lower()
 
 # join list into text
 file_text = ''.join(text_list)
+
+# remove extra spaces
+if fix_spaces:
+  lines = file_text.splitlines()
+  for index in range(len(lines)):
+    # TODO: handle comments after a line of code (format only the comment).
+    # Example: print      "mum" # prints    "mum"
+    # Current result: print "mum" # prints "mum"
+    # Expected result: print      "mum" # prints "mum"
+    if ((comment_type in lines[index]) and (('\\' + comment_type) not in lines[index])):
+      lines[index] = ' '.join(lines[index].split())
+
+  file_text = '\n'.join(lines)
 
 # write the result into a new file
 new_file = open('new_' + filename, 'w')
 new_file.write(file_text)
 new_file.close()
-
