@@ -64,16 +64,16 @@ try:
       print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
 
       print('\nMandatory arguments:')
-      print('  -t | --type : comment_type. For example: \'# \' or \'//\'')
+      print('  -t | --type : comment_type. For example: \'#\' or \'//\'')
       print('  filename : filename at the end of the command. For example: \'myfile.py\'')
-      print('\nExample with only mandaory arguments: python3 main.py -t \'# \' myfile.py')
+      print('\nExample with only mandaory arguments: python3 main.py -t \'#\' myfile.py')
 
       print('\nOptional arguments:')
       print('  -h | --help : guideline')
       print('  -n | --no-space : format without space after command_type')
       print('  -c | --case : uppercase (or u) / lowercase (or l) first char of the word after command_type. Default upper')
       print('  -e | --exclude : stringlist of words to exclude from `case` format. For example: \'NULL,OK\'')
-      print('\nExample: python3 main.py -t \'# \' -c l -e \'null,ok\' myfile.py')
+      print('\nExample: python3 main.py -t \'# \' -c l -e \'NULL,OK\' myfile.py')
       sys.exit(0)
     # case: no-space
     elif current_argument in ('-n', '--no-space'):
