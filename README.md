@@ -10,7 +10,7 @@ Just for the explanation:
 
 ## Arguments explanation
 ### Mandatory arguments
-- `-t`, `--type`: comment symbol (like `\\` for C/C++, `#` for Python etc...) surrouned by `'`
+- `-t`, `--type`: comment symbol (like `//` for C/C++, `#` for Python etc...) surrouned by `'`
   - Example: `--type '#'`
 - `filename`: the file that needs comment formatting. **MUST BE THE LAST ARGUMENT**
 
