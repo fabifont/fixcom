@@ -34,6 +34,8 @@ INFO_ARGUMENTS =   '''\nMandatory arguments:
                         -n | --no-space : format without space after command_type
                         -c | --case : uppercase (or u) / lowercase (or l) first char of the word after command_type. Default upper
                         -e | --exclude : stringlist of words to exclude from `case` format. For example: \'NULL,OK\'
+                        -a | --all: format all words after the comment symbol
+                        -s | --spaces: remove all extra spaces after the comment symbol
                       \nExample: python3 main.py -t \'# \' -c l -e \'NULL,OK\' myfile.py'''
 
 # error messages
