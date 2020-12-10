@@ -21,6 +21,25 @@ def get_word(start, char_list):
 
   return word
 
+# info messages
+INFO_USAGE = '\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>'
+INFO_HELP = '\nUse -h or --help flag to get more info'
+INFO_ARGUMENTS =   '''\nMandatory arguments:
+                        -t | --type : comment_type. For example: \'#\' or \'//\'
+                        filename : filename at the end of the command. For example: \'myfile.py\'
+                        \nExample with only mandaory arguments: python3 main.py -t \'#\' myfile.py
+
+                    \nOptional arguments:
+                        -h | --help : guideline
+                        -n | --no-space : format without space after command_type
+                        -c | --case : uppercase (or u) / lowercase (or l) first char of the word after command_type. Default upper
+                        -e | --exclude : stringlist of words to exclude from `case` format. For example: \'NULL,OK\'
+                      \nExample: python3 main.py -t \'# \' -c l -e \'NULL,OK\' myfile.py'''
+
+# error messages
+ERR_WRONG_CASE = 'Wrong case type. Available types are: lower (or l), upper (or u). Default: upper'
+ERR_EMPTY_CMD = '\nEmpty command or missing filename'
+ERR_COMMENT_TYPE = '\nMissing mandatory comment_type'
 
 # options
 OPTIONS = 'hnsat:c:e:'
@@ -53,27 +72,17 @@ try:
 
   # empty command or filename not specified and arg is not 'help'
   if len(arguments) == 0 or (len(values) != 1 and (not any('-h' in arg for arg in arguments) and not any('--help' in arg for arg in arguments))):
-    print('\nEmpty command or missing filename')
-    print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
-    print('\nUse -h or --help flag to get more info')
+    print(ERR_EMPTY_CMD)
+    print(INFO_USAGE)
+    print(INFO_HELP)
     sys.exit(2)
 
   for current_argument, current_value in arguments:
     # case: help
     if current_argument in ('-h', '--help'):
-      print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
-
-      print('\nMandatory arguments:')
-      print('  -t | --type : comment_type. For example: \'#\' or \'//\'')
-      print('  filename : filename at the end of the command. For example: \'myfile.py\'')
-      print('\nExample with only mandaory arguments: python3 main.py -t \'#\' myfile.py')
-
-      print('\nOptional arguments:')
-      print('  -h | --help : guideline')
-      print('  -n | --no-space : format without space after command_type')
-      print('  -c | --case : uppercase (or u) / lowercase (or l) first char of the word after command_type. Default upper')
-      print('  -e | --exclude : stringlist of words to exclude from `case` format. For example: \'NULL,OK\'')
-      print('\nExample: python3 main.py -t \'# \' -c l -e \'NULL,OK\' myfile.py')
+      print(INFO_USAGE)
+      print(INFO_ARGUMENTS)
+     
       sys.exit(0)
     # case: no-space
     elif current_argument in ('-n', '--no-space'):
@@ -93,8 +102,7 @@ try:
         upper = False
       # case: wrong case value
       elif(str(current_value) != 'upper' and str(current_value) != 'u'):
-        print(
-            'Wrong case type. Available types are: lower (or l), upper (or u). Default: upper')
+        print(ERR_WRONG_CASE)
     # case: exclude
     elif current_argument in ('-e', '--exclude'):
       # get list of excluded words
@@ -102,13 +110,13 @@ try:
 # wrong command or values
 except getopt.error as err:
   print(err)
-  print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
+  print(INFO_USAGE)
   sys.exit(2)
 
 # check mandatory arguments
 if comment_type is None:
-  print('\nMissing mandatory comment_type')
-  print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
+  print(ERR_COMMENT_TYPE)
+  print(INFO_USAGE)
   sys.exit(2)
 
 comment_type_size = len(comment_type)
