@@ -45,7 +45,7 @@ int main() {
 ```
 
 Comment formatting:
-`python3 main.py -s -all -t '//' -c lower -e 'NULL' test.c`
+`python3 main.py -s -a -t '//' -c lower -e 'NULL' test.c`
 
 Result (`new_test.c`):
 ```C
