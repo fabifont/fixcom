@@ -3,6 +3,7 @@ import getopt
 import sys
 import re
 
+
 def get_word(start, char_list):
   """get_word(start, char_list) -> word
 
@@ -19,6 +20,7 @@ def get_word(start, char_list):
     start += 1
 
   return word
+
 
 # options
 OPTIONS = 'hnsat:c:e:'
@@ -42,7 +44,7 @@ comment_type = None
 # list of excluded words
 excluded_list = []
 
-# upper / Lower case
+# upper / lower case
 upper = True
 
 # parsing arguments
@@ -62,16 +64,16 @@ try:
       print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
 
       print('\nMandatory arguments:')
-      print('  -t | --type : comment_type. For example: \'#\' or \'//\'')
+      print('  -t | --type : comment_type. For example: \'# \' or \'//\'')
       print('  filename : filename at the end of the command. For example: \'myfile.py\'')
-      print('\nExample with only mandaory arguments: python3 main.py -t \'#\' myfile.py')
+      print('\nExample with only mandaory arguments: python3 main.py -t \'# \' myfile.py')
 
       print('\nOptional arguments:')
       print('  -h | --help : guideline')
       print('  -n | --no-space : format without space after command_type')
       print('  -c | --case : uppercase (or u) / lowercase (or l) first char of the word after command_type. Default upper')
       print('  -e | --exclude : stringlist of words to exclude from `case` format. For example: \'NULL,OK\'')
-      print('\nExample: python3 main.py -t \'#\' -c l -e \'NULL,OK\' myfile.py')
+      print('\nExample: python3 main.py -t \'# \' -c l -e \'null,ok\' myfile.py')
       sys.exit(0)
     # case: no-space
     elif current_argument in ('-n', '--no-space'):
@@ -103,8 +105,8 @@ except getopt.error as err:
   print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
   sys.exit(2)
 
-# Check mandatory arguments
-if comment_type == None:
+# check mandatory arguments
+if comment_type is None:
   print('\nMissing mandatory comment_type')
   print('\nUsage: main.py (-n) -t <comment_type> (-c <upper/lower_case>) (-e <exclude_stringlist>) <filename>')
   sys.exit(2)
@@ -148,9 +150,9 @@ text_list = list(file_text)
 counter = 0
 
 for match in matches:
-  if(no_space):
+  if no_space:
     # if there is a space after command_type, remove it
-    if(text_list[match + comment_type_size + counter] == ' '):
+    if text_list[match + comment_type_size + counter] == ' ':
       del text_list[match + comment_type_size + counter]
       counter -= 1
       # there were a space, indexes are the same but we need to edit the next char
@@ -158,9 +160,9 @@ for match in matches:
     else:
       # everything ok, no need to add space counter
       move = 0
-  elif(not no_space):
+  else:
     # if there isn't a space after command_type add it
-    if(text_list[match + comment_type_size + counter] != ' '):
+    if text_list[match + comment_type_size + counter] != ' ':
       text_list.insert(match + comment_type_size + counter, ' ')
       counter += 1
       # everything ok, no need to add space counter
@@ -179,7 +181,7 @@ for match in matches:
       word = get_word(current, text_list)
       word_size = len(word)
       # if the word is not excluded
-      if(word not in excluded_list):
+      if word not in excluded_list:
         # format every char
         for i in range(word_size):
           # case: uppercase
@@ -193,7 +195,7 @@ for match in matches:
   # if only the first char of the first word must be formatted
   else:
     # if the word is not excluded
-    if(get_word(current, text_list) not in excluded_list):
+    if get_word(current, text_list) not in excluded_list:
       # case: uppercase
       if upper:
         text_list[current] = text_list[current].upper()
